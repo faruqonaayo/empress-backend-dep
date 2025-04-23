@@ -13,7 +13,7 @@ import Customer from "../models/customer.js";
 // This function is used to add a new product to the database
 export async function postNewProduct(req, res, next) {
   try {
-    if (req.user.role !== "admin") {
+    if (req.user?.role !== "admin") {
       return serverResponse(res, 401, "Unauthorized access", null);
     }
 
@@ -54,6 +54,10 @@ export async function postNewProduct(req, res, next) {
 // This function is used to get all products from the database
 export async function getAllProducts(req, res, next) {
   try {
+    if (req.user?.role !== "admin") {
+      return serverResponse(res, 401, "Unauthorized access", null);
+    }
+
     const products = await Product.find();
     return serverResponse(
       res,
@@ -69,6 +73,10 @@ export async function getAllProducts(req, res, next) {
 // This function is used to get a single product from the database
 export async function getSingleProduct(req, res, next) {
   try {
+    if (req.user?.role !== "admin") {
+      return serverResponse(res, 401, "Unauthorized access", null);
+    }
+
     // Check if the product ID is valid
     const productId = mongoose.isValidObjectId(req.params.productId)
       ? req.params.productId
